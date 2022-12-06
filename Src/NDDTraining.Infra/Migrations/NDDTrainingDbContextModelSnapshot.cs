@@ -3,20 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NDDTraining.Infra.Data.Context;
 
 #nullable disable
 
-namespace NDDTraining.Infra.Data.Migrations
+namespace NDDTraining.Infra.Migrations
 {
     [DbContext(typeof(NDDTrainingDbContext))]
-    [Migration("20221121014949_AddSeed")]
-    partial class AddSeed
+    partial class NDDTrainingDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -256,6 +253,11 @@ namespace NDDTraining.Infra.Data.Migrations
                         .HasColumnType("TIME")
                         .HasColumnName("DURATION");
 
+                    b.Property<DateTime>("ReleaseDate")
+                        .HasMaxLength(50)
+                        .HasColumnType("DATE")
+                        .HasColumnName("DATE");
+
                     b.Property<string>("Teacher")
                         .IsRequired()
                         .HasMaxLength(150)
@@ -286,6 +288,7 @@ namespace NDDTraining.Infra.Data.Migrations
                             Category = "tecnologia",
                             Description = "Architecto eaque consectetur nostrum impedit earum at harum. Reiciendis suscipit soluta, ab, repellat ad, Architecto eaque consectetur nostrum impedit earum at harum. Architecto eaque consectetur nostrum impedit earum at harum., Architecto eaque consectetur nostrum impedit earum at harum.",
                             Duration = new TimeSpan(0, 20, 0, 0, 0),
+                            ReleaseDate = new DateTime(2022, 12, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Teacher = "Carlos Silva",
                             Title = "Manutenção de Computadores",
                             Url = "https://certificadocursosonline.com/wp-content/uploads/2018/07/Curso-de-Manutenc%CC%A7a%CC%83o-de-Computadores.jpg"
@@ -297,6 +300,7 @@ namespace NDDTraining.Infra.Data.Migrations
                             Category = "idioma",
                             Description = "Neste curso, os alunos irão obter um conhecimento aprofundado sobre os recursos disponíveis sobre Inlges o basico.",
                             Duration = new TimeSpan(2, 22, 0, 0, 0),
+                            ReleaseDate = new DateTime(2022, 12, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Teacher = "Rodrigo Rosa",
                             Title = "Ingles Basico",
                             Url = "https://setcesp.org.br/wp-content/uploads/2019/08/treinamento.jpg"
@@ -308,10 +312,37 @@ namespace NDDTraining.Infra.Data.Migrations
                             Category = "educacao",
                             Description = "Neste curso, os alunos irão obter um conhecimento aprofundado sobre os recursos disponíveis.",
                             Duration = new TimeSpan(0, 18, 0, 0, 0),
+                            ReleaseDate = new DateTime(2022, 12, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Teacher = "Maria Eduarda",
                             Title = "Redacao",
                             Url = "https://setcesp.org.br/wp-content/uploads/2019/08/treinamento.jpg"
                         });
+                });
+
+            modelBuilder.Entity("NDDTraining.Domain.Models.TrainingActivity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("VARCHAR")
+                        .HasColumnName("DESCRIPTION");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("VARCHAR")
+                        .HasColumnName("TITLE");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ACTIVITY", (string)null);
                 });
 
             modelBuilder.Entity("NDDTraining.Domain.Models.User", b =>
@@ -339,9 +370,9 @@ namespace NDDTraining.Infra.Data.Migrations
                         .HasColumnType("VARCHAR")
                         .HasColumnName("EMAIL");
 
-                    b.Property<string>("Image")
-                        .IsRequired()
-                        .HasColumnType("VARCHAR")
+                    b.Property<byte[]>("Image")
+                        .HasMaxLength(8000)
+                        .HasColumnType("VARBINARY")
                         .HasColumnName("IMAGE");
 
                     b.Property<string>("Name")
@@ -430,6 +461,11 @@ namespace NDDTraining.Infra.Data.Migrations
             modelBuilder.Entity("NDDTraining.Domain.Models.Training", b =>
                 {
                     b.Navigation("Modules");
+                });
+
+            modelBuilder.Entity("NDDTraining.Domain.Models.User", b =>
+                {
+                    b.Navigation("Registrations");
                 });
 #pragma warning restore 612, 618
         }
